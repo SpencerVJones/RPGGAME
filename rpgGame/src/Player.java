@@ -6,7 +6,7 @@ public class Player extends LivingCreature{
     public int Level;
 
     public ArrayList<InventoryItem> Inventory;
-    public ArrayList<Quest> Quests;
+    public ArrayList<PlayerQuest> Quests;
 
     public Location CurrentLocation;
 
@@ -17,7 +17,7 @@ public class Player extends LivingCreature{
     public int getLevel() {return Level;}
 
     public ArrayList<InventoryItem> getInventory() {return Inventory;}
-    public ArrayList<Quest> getQuests() {return Quests;}
+    public ArrayList<PlayerQuest> getQuests() {return Quests;}
 
     public Location getCurrentLocation() {return CurrentLocation;}
 
@@ -27,7 +27,7 @@ public class Player extends LivingCreature{
     public void setLevel(int Level) {this.Level = Level;}
 
     public void setInventory(ArrayList<InventoryItem> Inventory) {this.Inventory = Inventory;}
-    public void setQuests(ArrayList<Quest> Quests) {this.Quests = Quests;}
+    public void setQuests(ArrayList<PlayerQuest> Quests) {this.Quests = Quests;}
 
     public void setCurrentLocation(Location CurrentLocation) {this.CurrentLocation = CurrentLocation;}
 
