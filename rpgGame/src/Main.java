@@ -1,6 +1,8 @@
+import javax.lang.model.element.Name;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class Main {
 
@@ -26,7 +28,8 @@ public class Main {
     private JComboBox cboWeapons;
     private JComboBox cboPotions;
 
-    private final Player player;
+    private Player player;
+    private Monster currentMonster;
 
     public static void main(String[] args) {
         // Creating Player
@@ -76,7 +79,7 @@ public class Main {
             public void actionPerformed(ActionEvent e) {
                 // Move North Logic
                 System.out.println("Moved North");
-                // TODO: ADD MOVE TO FUNCTION HERE
+                MoveTo(player.CurrentLocation.LocationToNorth);
             }
         });
 
@@ -85,7 +88,7 @@ public class Main {
             public void actionPerformed(ActionEvent e) {
                 // Move East Logic
                 System.out.println("Moved East");
-                // TODO: ADD MOVE TO FUNCTION HERE
+                MoveTo(player.CurrentLocation.LocationToEast);
             }
         });
 
@@ -94,18 +97,16 @@ public class Main {
             public void actionPerformed(ActionEvent e) {
                 // Move South Logic
                 System.out.println("Moved South");
-                // TODO: ADD MOVE TO FUNCTION HERE
+                MoveTo(player.CurrentLocation.LocationToSouth);
             }
         });
-
-
 
         btnWest.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Move West Logic
                 System.out.println("Moved West");
-                // TODO: ADD MOVE TO FUNCTION HERE
+                MoveTo(player.CurrentLocation.LocationToWest);
             }
         });
 
@@ -126,11 +127,6 @@ public class Main {
                 System.out.println("Weapon used!");
             }
         });
-
-
-
-
-
 
     }
 
@@ -296,13 +292,127 @@ public class Main {
                     }
                 }
                 // Add quest to the players quest list
-                player.Quests.add(new PlayerQuest(newlocation.QuestAvailableHere));
+                player.Quests.add(new PlayerQuest(newlocation.QuestAvailableHere, false));
             }
-
-
-
         }
 
+        // Does the location have a monster
+        if(newlocation.MonsterLivingHere != null){
+            rtbMessages.setText("You see a " + newlocation.MonsterLivingHere.Name);
+
+            // Make a new monster
+            Monster standardMonster = World.MonsterByID(newlocation.MonsterLivingHere.ID);
+
+            currentMonster = new Monster(standardMonster.ID, standardMonster.Name, standardMonster.MaximumDamage,
+                    standardMonster.RewardExperiencePoints, standardMonster.RewardGold, standardMonster.CurrentHitPoints, standardMonster.MaximumHitPoints);
+
+            for(LootItem lootItem : standardMonster.LootTable){
+                currentMonster.LootTable.add(lootItem);
+            }
+
+            cboWeapons.setVisible(true);
+            cboPotions.setVisible(true);
+            btnUseWeapon.setVisible(true);
+            btnUsePotion.setVisible(true);
+        }
+        else {
+            currentMonster = null;
+            cboWeapons.setVisible(false);
+            cboPotions.setVisible(false);
+            btnUseWeapon.setVisible(false);
+            btnUsePotion.setVisible(false);
+        }
+
+        // Refresh player's inventory list
+        dgvInventory.setTableHeader(null);
+
+        dgvInventory.setModel(new javax.swing.table.DefaultTableModel(
+                new Object[][]{},
+                new String[]{"Name", "Quantity"}
+        ));
+
+        javax.swing.table.DefaultTableModel inventoryModel =
+                (javax.swing.table.DefaultTableModel) dgvInventory.getModel();
+
+        for (InventoryItem inventoryItem : player.getInventory()) {
+            if (inventoryItem.getQuantity() > 0) {
+                inventoryModel.addRow(new Object[]{
+                        inventoryItem.getDetails().getName(),
+                        String.valueOf(inventoryItem.getQuantity())
+                });
+            }
+        }
+
+        // Refresh player's quest list
+        dgvQuests.setTableHeader(null); // Equivalent to RowHeadersVisible = false
+
+        dgvQuests.setModel(new javax.swing.table.DefaultTableModel(
+                new Object[][]{},
+                new String[]{"Name", "Done?"}
+        ));
+
+        javax.swing.table.DefaultTableModel questsModel =
+                (javax.swing.table.DefaultTableModel) dgvQuests.getModel();
+
+        for (PlayerQuest playerQuest : player.getQuests()) {
+            questsModel.addRow(new Object[]{
+                    playerQuest.getDetails().getName(),
+                    String.valueOf(playerQuest.IsCompleted)
+            });
+        }
+
+        // Refresh player's weapons combobox
+        ArrayList<Weapon> weapons = new ArrayList<Weapon>();
+
+        for (InventoryItem inventoryItem : player.getInventory()) {
+            if (inventoryItem.getDetails() instanceof Weapon) {
+                if (inventoryItem.getQuantity() > 0) {
+                    weapons.add((Weapon) inventoryItem.getDetails());
+                }
+            }
+        }
+
+        if(weapons.size() == 0){
+            // Player doesnt have any weapons
+            cboWeapons.setVisible(false);
+            btnUseWeapon.setVisible(false);
+        }
+        else {
+            if (!weapons.isEmpty()) {
+                DefaultComboBoxModel<Weapon> model = new DefaultComboBoxModel<>();
+                for (Weapon weapon : weapons) {
+                    model.addElement(weapon);
+                }
+                cboWeapons.setModel(model);
+                cboWeapons.setSelectedIndex(0);
+            }
+        }
+
+        // Refresh player's potions combobox
+        ArrayList<HealingPotion> healingPotions = new ArrayList<>();
+
+        for (InventoryItem inventoryItem : player.getInventory()) {
+            if (inventoryItem.getDetails() instanceof HealingPotion) {
+                if (inventoryItem.getQuantity() > 0) {
+                    healingPotions.add((HealingPotion) inventoryItem.getDetails());
+                }
+            }
+        }
+
+        if (healingPotions.isEmpty()) {
+            cboPotions.setVisible(false);
+            btnUsePotion.setVisible(false);
+        } else {
+            DefaultComboBoxModel<HealingPotion> model = new DefaultComboBoxModel<>();
+            for (HealingPotion potion : healingPotions) {
+                model.addElement(potion);
+            }
+            cboPotions.setModel(model);
+            cboPotions.setSelectedIndex(0);
+
+            cboPotions.setVisible(true);
+            btnUsePotion.setVisible(true);
+        }
 
     }
 
