@@ -1,10 +1,10 @@
 import java.util.Random;
 
 public class RandomNumberGenerator {
-    Random random = new Random();
+    static Random random = new Random();
 
-    public int getRandomNumber() {
-        // Generates random number between one and 10
-        return random.nextInt(10) + 1;
+    // Generates a random number between min and max
+    public static int NumberBetween(int min, int max) {
+        return random.nextInt((max - min) + 1) + min;
     }
 }
