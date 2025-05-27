@@ -24,7 +24,7 @@ public class World {
     public final int QUEST_ID_CLEAR_ALCHEMIST_GARDEN = 1;
     public final int QUEST_ID_CLEAR_FARMERS_FIELD = 2;
 
-    public final int LOCATION_ID_HOME = 1;
+    public static final int LOCATION_ID_HOME = 1;
     public final int LOCATION_ID_TOWN_SQUARE = 2;
     public final int LOCATION_ID_GUARD_POST = 3;
     public final int LOCATION_ID_ALCHEMIST_HUT = 4;
@@ -205,4 +205,3 @@ public class World {
         return null;
     }
 }
-
