@@ -1,11 +1,15 @@
-public class HealingPotion extends Item{
+public class HealingPotion extends Item {
     public int AmountToHeal;
 
     // Getters
-    public int getAmountToHeal() {return AmountToHeal;}
+    public int getAmountToHeal() {
+        return AmountToHeal;
+    }
 
     // Setters
-    public void setAmountToHeal(int amountToHeal) {AmountToHeal = amountToHeal;}
+    public void setAmountToHeal(int amountToHeal) {
+        AmountToHeal = amountToHeal;
+    }
 
     // Constructor
     public HealingPotion(int ID, String Name, String NamePlural, int amountToHeal) {
