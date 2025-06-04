@@ -11,12 +11,28 @@ public class LootItem {
     }
 
     // Getters
-    public Item getDetails() { return Details; }
-    public int getDropPercentage() { return DropPercentage; }
-    public boolean getIsDefaultItem() { return IsDefaultItem; }
+    public Item getDetails() {
+        return Details;
+    }
+
+    public int getDropPercentage() {
+        return DropPercentage;
+    }
+
+    public boolean getIsDefaultItem() {
+        return IsDefaultItem;
+    }
 
     // Setters
-    public void setDetails(Item details) { this.Details = details; }
-    public void setDropPercentage(int dropPercentage) { this.DropPercentage = dropPercentage; }
-    public void setIsDefaultItem(boolean isDefaultItem) { this.IsDefaultItem = isDefaultItem; }
+    public void setDetails(Item details) {
+        this.Details = details;
+    }
+
+    public void setDropPercentage(int dropPercentage) {
+        this.DropPercentage = dropPercentage;
+    }
+
+    public void setIsDefaultItem(boolean isDefaultItem) {
+        this.IsDefaultItem = isDefaultItem;
+    }
 }
