@@ -10,12 +10,21 @@ public class Weapon extends Item {
         this.MaximumDamage = maximumDamage;
     }
 
-
     // Getters
-    public int getMinimumDamage() {return MinimumDamage;}
-    public int getMaximumDamage() {return MaximumDamage;}
+    public int getMinimumDamage() {
+        return MinimumDamage;
+    }
+
+    public int getMaximumDamage() {
+        return MaximumDamage;
+    }
 
     // Setters
-    public void setMinimumDamage(int MinimumDamage) {this.MinimumDamage = MinimumDamage;}
-    public void setMaximumDamage(int MaximumDamage) {this.MaximumDamage = MaximumDamage;}
+    public void setMinimumDamage(int MinimumDamage) {
+        this.MinimumDamage = MinimumDamage;
+    }
+
+    public void setMaximumDamage(int MaximumDamage) {
+        this.MaximumDamage = MaximumDamage;
+    }
 }
