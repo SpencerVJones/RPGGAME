@@ -1,31 +1,30 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class Main {
 
-    private JLabel lblLevel;
-    private JLabel label1;
-    private JLabel label2;
-    private JLabel label3;
-    private JLabel label4;
-    private JLabel lblHitPoints;
-    private JLabel lblGold;
-    private JLabel lblExperience;
     private JPanel mainPanel;
-    private JButton btnUseWeapon;
-    private JButton btnUsePotion;
-    private JButton btnNorth;
-    private JButton btnEast;
-    private JButton btnSouth;
-    private JButton btnWest;
-    private JTextField rtbLocation;
-    private JTextField rtbMessages;
-    private JTable dgvInventory;
-    private JTable dgvQuests;
-    private JComboBox cboWeapons;
-    private JComboBox cboPotions;
+    private JLabel levelLabel;
+    private JLabel hitPointsLabel;
+    private JLabel goldLabel;
+    private JLabel experienceLabel;
+    private JButton useWeaponButton;
+    private JButton usePotionButton;
+    private JButton northButton;
+    private JButton eastButton;
+    private JButton southButton;
+    private JButton westButton;
+    private JTextArea locationTextArea;
+    private JTextArea messagesTextArea;
+    private JTable inventoryTable;
+    private JTable questsTable;
+    private JComboBox weaponsComboBox;
+    private JComboBox potionsComboBox;
+    private JScrollPane messageScrollPane;
+    private JScrollPane locationScrollPane;
 
     private Player player;
     private Monster currentMonster;
@@ -42,33 +41,37 @@ public class Main {
         // Creating Location
         Location location = new Location(1, "Home", "This is your House");
 
+
         // Create the form and show it
         Main mainForm = new Main(player);
         JFrame frame = new JFrame("Player Info");
         frame.setContentPane(mainForm.getMainPanel());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
+        frame.setSize(800, 600);
+
+//        frame.setResizable(false); // Prevent resizing
+        frame.setLocationRelativeTo(null); // Center the frame on the screen
         frame.setVisible(true);
     }
 
 
     // Refresh UI Methods
     private void updatePlayerStatsUI() {
-        lblLevel.setText(String.valueOf(player.getLevel()));
-        lblGold.setText(String.valueOf(player.getGold()));
-        lblExperience.setText(String.valueOf(player.getExperiencePoints()));
-        lblHitPoints.setText(String.valueOf(player.getCurrentHitPoints()));
+        levelLabel.setText(String.valueOf(player.getLevel()));
+        goldLabel.setText(String.valueOf(player.getGold()));
+        experienceLabel.setText(String.valueOf(player.getExperiencePoints()));
+        hitPointsLabel.setText(String.valueOf(player.getCurrentHitPoints()));
     }
 
     private void updateInventoryListInUI() {
-        dgvInventory.setTableHeader(null);
-        dgvInventory.setModel(new javax.swing.table.DefaultTableModel(
+        inventoryTable.setTableHeader(null);
+        inventoryTable.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][]{},
                 new String[]{"Name", "Quantity"}
         ));
 
         javax.swing.table.DefaultTableModel inventoryModel =
-                (javax.swing.table.DefaultTableModel) dgvInventory.getModel();
+                (javax.swing.table.DefaultTableModel) inventoryTable.getModel();
 
         for (InventoryItem inventoryItem : player.getInventory()) {
             if (inventoryItem.getQuantity() > 0) {
@@ -81,14 +84,14 @@ public class Main {
     }
 
     private void updateQuestListInUI() {
-        dgvQuests.setTableHeader(null);
-        dgvQuests.setModel(new javax.swing.table.DefaultTableModel(
+        questsTable.setTableHeader(null);
+        questsTable.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][]{},
                 new String[]{"Name", "Done?"}
         ));
 
         javax.swing.table.DefaultTableModel questsModel =
-                (javax.swing.table.DefaultTableModel) dgvQuests.getModel();
+                (javax.swing.table.DefaultTableModel) questsTable.getModel();
 
         for (PlayerQuest playerQuest : player.getQuests()) {
             questsModel.addRow(new Object[]{
@@ -108,17 +111,17 @@ public class Main {
         }
 
         if (weapons.isEmpty()) {
-            cboWeapons.setVisible(false);
-            btnUseWeapon.setVisible(false);
+            weaponsComboBox.setEnabled(false);
+            useWeaponButton.setEnabled(false);
         } else {
             DefaultComboBoxModel<Weapon> model = new DefaultComboBoxModel<>();
             for (Weapon weapon : weapons) {
                 model.addElement(weapon);
             }
-            cboWeapons.setModel(model);
-            cboWeapons.setSelectedIndex(0);
-            cboWeapons.setVisible(true);
-            btnUseWeapon.setVisible(true);
+            weaponsComboBox.setModel(model);
+            weaponsComboBox.setSelectedIndex(0);
+            weaponsComboBox.setEnabled(true);
+            useWeaponButton.setEnabled(true);
         }
     }
 
@@ -132,48 +135,63 @@ public class Main {
         }
 
         if (healingPotions.isEmpty()) {
-            cboPotions.setVisible(false);
-            btnUsePotion.setVisible(false);
+            potionsComboBox.setEnabled(false);
+            usePotionButton.setEnabled(false);
         } else {
             DefaultComboBoxModel<HealingPotion> model = new DefaultComboBoxModel<>();
             for (HealingPotion potion : healingPotions) {
                 model.addElement(potion);
             }
-            cboPotions.setModel(model);
-            cboPotions.setSelectedIndex(0);
-            cboPotions.setVisible(true);
-            btnUsePotion.setVisible(true);
+            potionsComboBox.setModel(model);
+            potionsComboBox.setSelectedIndex(0);
+            potionsComboBox.setEnabled(true);
+            usePotionButton.setEnabled(true);
         }
     }
 
 
     public Main(Player player) {
         this.player = player;
+
+        Dimension fixedSize = new Dimension(50, 50);
+        messagesTextArea.setSize(fixedSize);
+        messageScrollPane.setSize(fixedSize);
+        locationTextArea.setSize(fixedSize);
+        locationScrollPane.setSize(fixedSize);
+
+        // Enable text wrapping in the text areas
+        messagesTextArea.setLineWrap(true);
+        messagesTextArea.setWrapStyleWord(true);
+
+        locationTextArea.setLineWrap(true);
+        locationTextArea.setWrapStyleWord(true);
+
+        mainPanel.setSize(800, 600);
         updatePlayerStatsUI();
 
         // Button Action Listeners
-        btnNorth.addActionListener(new ActionListener() {
+        northButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MoveTo(player.CurrentLocation.LocationToNorth);
             }
         });
 
-        btnEast.addActionListener(new ActionListener() {
+        eastButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MoveTo(player.CurrentLocation.LocationToEast);
             }
         });
 
-        btnSouth.addActionListener(new ActionListener() {
+        southButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MoveTo(player.CurrentLocation.LocationToSouth);
             }
         });
 
-        btnWest.addActionListener(new ActionListener() {
+        westButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MoveTo(player.CurrentLocation.LocationToWest);
@@ -181,11 +199,11 @@ public class Main {
         });
 
 
-        btnUseWeapon.addActionListener(new ActionListener() {
+        useWeaponButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Get currently selected weapon
-                Weapon currentWeapon = (Weapon) cboWeapons.getSelectedItem();
+                Weapon currentWeapon = (Weapon) weaponsComboBox.getSelectedItem();
 
                 // Determine amount of damage to do to the monster
                 int damageToMonster = RandomNumberGenerator.NumberBetween(currentWeapon.MinimumDamage, currentWeapon.MaximumDamage);
@@ -194,20 +212,20 @@ public class Main {
                 currentMonster.CurrentHitPoints -= damageToMonster;
 
                 // Display Message
-                rtbMessages.setText("You hit the " + currentMonster.Name + " for " + String.valueOf(damageToMonster) + " points.");
+                messagesTextArea.append("You hit the " + currentMonster.Name + " for " + String.valueOf(damageToMonster) + " points.");
 
                 // Check if the monster is dead
                 if (currentMonster.CurrentHitPoints <= 0) {
                     // Monster is dead
-                    rtbMessages.setText("You defeated the" + currentMonster.Name);
+                    messagesTextArea.append("You defeated the" + currentMonster.Name);
 
                     // Give player experience points for killing monster
                     player.ExperiencePoints += currentMonster.RewardExperiencePoints;
-                    rtbMessages.setText("You receive " + currentMonster.RewardExperiencePoints + " experience points.");
+                    messagesTextArea.append("You receive " + currentMonster.RewardExperiencePoints + " experience points.");
 
                     // Give player gold for killing monster
                     player.Gold += currentMonster.RewardGold;
-                    rtbMessages.setText("You receive " + currentMonster.RewardGold + " gold.");
+                    messagesTextArea.append("You receive " + currentMonster.RewardGold + " gold.");
 
                     // Get random loot items from the monster
                     ArrayList<InventoryItem> lootedItems = new ArrayList<InventoryItem>();
@@ -232,33 +250,33 @@ public class Main {
                         for (InventoryItem inventoryItem : lootedItems) {
                             player.AddItemToInventory(inventoryItem.Details);
                             if (inventoryItem.Quantity == 1) {
-                                rtbMessages.setText("You loot " + inventoryItem.Quantity + " " + inventoryItem.Details.Name);
+                                messagesTextArea.append("You loot " + inventoryItem.Quantity + " " + inventoryItem.Details.Name);
                             } else {
-                                rtbMessages.setText("You loot " + inventoryItem.Quantity + " " + inventoryItem.Details.NamePlural);
+                                messagesTextArea.append("You loot " + inventoryItem.Quantity + " " + inventoryItem.Details.NamePlural);
                             }
                         }
                     }
                     updatePlayerStatsUI();
 
                     // Move player to current location (heals player and creates new monster to fight_
-                    MoveTo(player.CurrentLocation);
+                    MoveTo(player.getCurrentLocation());
 
                 } else { // Monster is still alive
                     // Determine amount of damage monster does to the player
                     int damageToPlayer = RandomNumberGenerator.NumberBetween(0, currentMonster.MaximumDamage);
 
                     // Display Message
-                    rtbMessages.setText("The " + currentMonster.Name + " did " + String.valueOf(damageToPlayer) + " points of damage.");
+                    messagesTextArea.append("The " + currentMonster.Name + " did " + String.valueOf(damageToPlayer) + " points of damage.");
 
                     // Subtract damage from the player
                     player.CurrentHitPoints -= damageToPlayer;
 
                     // Refresh player data in UI
-                    lblHitPoints.setText(String.valueOf(player.CurrentHitPoints));
+                    hitPointsLabel.setText(String.valueOf(player.getCurrentHitPoints()));
 
                     if (player.CurrentHitPoints <= 0) {
                         // Display message
-                        rtbMessages.setText("The " + currentMonster.Name + " killed you.");
+                        messagesTextArea.append("The " + currentMonster.Name + " killed you.");
 
                         // Move player to "Home"
                         MoveTo(World.LocationByID(World.LOCATION_ID_HOME));
@@ -268,11 +286,11 @@ public class Main {
         });
 
 
-        btnUsePotion.addActionListener(new ActionListener() {
+        usePotionButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Get currently selected potion
-                HealingPotion potion = (HealingPotion) cboPotions.getSelectedItem();
+                HealingPotion potion = (HealingPotion) potionsComboBox.getSelectedItem();
 
                 // Add healing amount to players current hit points
                 player.CurrentHitPoints = player.CurrentHitPoints + potion.AmountToHeal;
@@ -290,20 +308,20 @@ public class Main {
                     }
 
                     // Display Message
-                    rtbMessages.setText("You drink a " + potion.Name);
+                    messagesTextArea.append("You drink a " + potion.Name);
 
                     // Monster gets their turn to attack
                     // Determine amount of damage monster does to player
                     int damageToPlayer = RandomNumberGenerator.NumberBetween(1, currentMonster.getMaximumDamage());
 
                     // Display message
-                    rtbMessages.setText("The " + currentMonster.Name + " did " + damageToPlayer + " points of damage.");
+                    messagesTextArea.append("The " + currentMonster.Name + " did " + damageToPlayer + " points of damage.");
 
                     // Subtract damage from player
                     player.CurrentHitPoints -= damageToPlayer;
 
                     if (player.CurrentHitPoints <= 0) {
-                        rtbMessages.setText("The " + currentMonster.Name + " killed you.");
+                        messagesTextArea.append("The " + currentMonster.Name + " killed you.");
 
                         // Move player to "Home"
                         MoveTo(World.LocationByID(World.LOCATION_ID_HOME));
@@ -327,7 +345,7 @@ public class Main {
     public void MoveTo(Location newlocation) {
         // Check if location requires item
         if (!player.HasItemRequiredToEnter(newlocation)) {
-            rtbMessages.setText("You must have a " + newlocation.ItemRequiredToEnter.Name + " to enter this location");
+            messagesTextArea.append("You must have a " + newlocation.ItemRequiredToEnter.Name + " to enter this location");
             return;
         }
 
@@ -335,13 +353,13 @@ public class Main {
         player.CurrentLocation = newlocation;
 
         // Show/Hide available movement buttons
-        btnNorth.setVisible(newlocation.LocationToNorth != null);
-        btnEast.setVisible(newlocation.LocationToEast != null);
-        btnSouth.setVisible(newlocation.LocationToSouth != null);
-        btnWest.setVisible(newlocation.LocationToWest != null);
+        northButton.setEnabled(newlocation.LocationToNorth != null);
+        eastButton.setEnabled(newlocation.LocationToEast != null);
+        southButton.setEnabled(newlocation.LocationToSouth != null);
+        westButton.setEnabled(newlocation.LocationToWest != null);
 
         // Display current location name and description
-        rtbLocation.setText(newlocation.Name + "\n" + newlocation.Description);
+        locationTextArea.append(newlocation.Name + "\n" + newlocation.Description);
 
         // Completely heal player
         player.CurrentHitPoints = player.MaximumHitPoints;
@@ -365,13 +383,13 @@ public class Main {
                     // The player has all items needed to complete the quest
                     if (playerHasAllItemsToCompleteQuest) {
                         // Display Message
-                        rtbMessages.setText("You complete the '" + newlocation.QuestAvailableHere.Name + "' quest.");
+                        messagesTextArea.append("You complete the '" + newlocation.QuestAvailableHere.Name + "' quest.");
 
                         // Remove quest items from inventory
                         player.RemoveQuestCompletionItem(newlocation.QuestAvailableHere);
 
                         // Give Quest rewards
-                        rtbMessages.setText("You receive: \n" +
+                        messagesTextArea.append("You receive: \n" +
                                 newlocation.QuestAvailableHere.RewardExperiencePoints + " experience points\n"
                                 + newlocation.QuestAvailableHere.getRewardGold() + " gold\n"
                                 + newlocation.QuestAvailableHere.RewardItem.Name
@@ -389,7 +407,7 @@ public class Main {
                 }
             } else { // The player does not already have the quest
                 // Display Message
-                rtbMessages.setText(
+                messagesTextArea.append(
                         "You receive the " + newlocation.QuestAvailableHere.Name + " quest.\n"
                                 + newlocation.QuestAvailableHere.Description + "\n"
                                 + "To complete it, return with:"
@@ -397,9 +415,9 @@ public class Main {
 
                 for (QuestCompletionItem qci : newlocation.QuestAvailableHere.QuestCompletionItems) {
                     if (qci.Quantity == 1) {
-                        rtbMessages.setText(qci.Quantity + " " + qci.Details.Name);
+                        messagesTextArea.append(qci.Quantity + " " + qci.Details.Name);
                     } else {
-                        rtbMessages.setText(qci.Quantity + " " + qci.Details.NamePlural);
+                        messagesTextArea.append(qci.Quantity + " " + qci.Details.NamePlural);
                     }
                 }
 
@@ -410,7 +428,7 @@ public class Main {
 
         // Does the location have a monster
         if (newlocation.MonsterLivingHere != null) {
-            rtbMessages.setText("You see a " + newlocation.MonsterLivingHere.Name);
+            messagesTextArea.append("You see a " + newlocation.MonsterLivingHere.Name);
 
             // Make a new monster
             Monster standardMonster = World.MonsterByID(newlocation.MonsterLivingHere.ID);
@@ -422,22 +440,21 @@ public class Main {
                 currentMonster.LootTable.add(lootItem);
             }
 
-            cboWeapons.setVisible(true);
-            cboPotions.setVisible(true);
-            btnUseWeapon.setVisible(true);
-            btnUsePotion.setVisible(true);
+            weaponsComboBox.setEnabled(true);
+            potionsComboBox.setEnabled(true);
+            useWeaponButton.setEnabled(true);
+            usePotionButton.setEnabled(true);
         } else {
             currentMonster = null;
-            cboWeapons.setVisible(false);
-            cboPotions.setVisible(false);
-            btnUseWeapon.setVisible(false);
-            btnUsePotion.setVisible(false);
+            weaponsComboBox.setEnabled(false);
+            potionsComboBox.setEnabled(false);
+            useWeaponButton.setEnabled(false);
+            usePotionButton.setEnabled(false);
         }
 
         updateInventoryListInUI();
         updateQuestListInUI();
         updateWeaponListInUI();
         updatePotionListInUI();
-
     }
 }
