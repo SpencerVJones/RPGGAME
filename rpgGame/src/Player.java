@@ -7,9 +7,7 @@ public class Player extends LivingCreature {
 
     public ArrayList<InventoryItem> Inventory;
     public ArrayList<PlayerQuest> Quests;
-
     public Location CurrentLocation;
-
 
     // Getters
     public int getGold() {
@@ -67,8 +65,6 @@ public class Player extends LivingCreature {
         this.Gold = Gold;
         this.ExperiencePoints = ExperiencePoints;
         this.Level = Level;
-
-        // ADD To Constructor
         Inventory = new ArrayList<>();
         Quests = new ArrayList<>();
     }
