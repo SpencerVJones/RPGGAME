@@ -8,17 +8,31 @@ public class Item {
         this.ID = ID;
         this.Name = Name;
         this.NamePlural = NamePlural;
-
     }
 
     // Getters
-    public int getID() {return ID;}
-    public String getName() {return Name;}
-    public String getNamePlural() {return NamePlural;}
+    public int getID() {
+        return ID;
+    }
+
+    public String getName() {
+        return Name;
+    }
+
+    public String getNamePlural() {
+        return NamePlural;
+    }
 
     // Setters
-    public void setID(int ID) {this.ID = ID;}
-    public void setName(String name) {Name = name;}
-    public void setNamePlural(String namePlural) {NamePlural = namePlural;}
+    public void setID(int ID) {
+        this.ID = ID;
+    }
 
+    public void setName(String name) {
+        Name = name;
+    }
+
+    public void setNamePlural(String namePlural) {
+        NamePlural = namePlural;
+    }
 }
