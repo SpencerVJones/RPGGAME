@@ -57,18 +57,24 @@ This is a Java-based RPG game project featuring a rich world with multiple locat
 
 ## Documentation & Visuals
 ### Map Image: Main game world map.
-
+- [Map (Lucidspark)](https://lucid.app/lucidspark/721cc561-be0a-40c1-8cfc-d6671b249f59/edit?invitationId=inv_e4a64a06-7862-4f73-8185-28d8540dcf91&page=0_0#)
+![Map](rpgGame/PreviewContent/Map.png)
 
 
 ### Location, Item, Monster, and Quest Chart: Chart outlining all locations, items, monsters, and quest.
-
+- [Chart (Lucidspark)](https://lucid.app/lucidspark/721cc561-be0a-40c1-8cfc-d6671b249f59/edit?invitationId=inv_e4a64a06-7862-4f73-8185-28d8540dcf91&page=0_0#)
+![Chart](rpgGame/PreviewContent/chart.png)
 
 
 ### UML Diagrams: Overall class diagram of game architecture.
 - Class relationships for Player and Item hierarchy.
+- [UML Diagram (Lucidchart)](https://lucid.app/lucidchart/b0b5c01c-ae56-46f1-add1-97a99082ef4d/edit?invitationId=inv_be24f28a-13ba-428e-ad28-1644c97d59a3&page=HWEp-vi-RSFO#)
+![UML Diagram](rpgGame/PreviewContent/UML.png)
 
 
-### User Interface (UI) Screenshot: The main game window with player stats and controls.
+### User Interface (UI) Screenshots: The main game window with player stats and controls.
+![UI](rpgGame/PreviewContent/UI.png)
+![UI 2](rpgGame/PreviewContent/ui2.png)
 
 
 ---
