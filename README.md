@@ -87,7 +87,6 @@ RPGGAME/
 #### Prerequisites
 - Java Development Kit (JDK) 17 or higher
 - IntelliJ IDEA or any Java IDE
-- Maven or Gradle (if used for build, otherwise plain Java compilation)
 #### Installation
 1. Clone the repository:
    ```bash
