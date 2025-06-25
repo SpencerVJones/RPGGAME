@@ -1,6 +1,10 @@
 <!-- Header -->
 <div align="center">
   <h2 align="center">RPG Game</h2>
+	<div align="left">
+	
+   ![Repo Views](https://visitor-badge.laobi.icu/badge?page_id=SpencerVJones/RPGGAME)
+</div>
   <p align="center">
     A classic RPG built in Java with a Swing GUI and object-oriented architecture.
     <br />
