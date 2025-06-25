@@ -2,7 +2,13 @@
 <div align="center">
   <h2 align="center">RPG Game</h2>
 	<div align="left">
-	
+
+![GitHub Views](https://SpencerVJones.github.io/RPGGAME/traffic/views.svg)
+![GitHub Clones](https://SpencerVJones.github.io/RPGGAME/traffic/clones.svg)
+![Views per Week](https://SpencerVJones.github.io/RPGGAME/traffic/views_week.svg)
+![Clones per Week](https://SpencerVJones.github.io/RPGGAME/traffic/clones_week.svg)
+
+ 
    ![Repo Views](https://visitor-badge.laobi.icu/badge?page_id=SpencerVJones/RPGGAME)
 </div>
   <p align="center">
